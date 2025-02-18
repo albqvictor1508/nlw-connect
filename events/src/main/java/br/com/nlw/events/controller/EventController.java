@@ -28,6 +28,7 @@ public class EventController {
     @GetMapping("/events/{prettyName}")
     public ResponseEntity<EventModel> getEventByPreetyName(@PathVariable String prettyName) {
         EventModel evt = service.getByPreetyName(prettyName);
+
         if (evt == null) return ResponseEntity.notFound().build();
 
         return ResponseEntity.status(200).body(evt);
