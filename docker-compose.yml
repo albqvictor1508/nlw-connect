@@ -1,0 +1,11 @@
+name: "nlw-connect"
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: nlw-connect-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=dev123
+
