@@ -11,7 +11,7 @@ import java.util.Objects;
 public class EventModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer eventId;
     @Column(length = 255, nullable = false)
     private String title;
 
@@ -37,11 +37,11 @@ public class EventModel {
     private LocalTime endTime;
 
     public Integer getId() {
-        return id;
+        return eventId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.eventId = id;
     }
 
     public String getTitle() {
@@ -112,11 +112,11 @@ public class EventModel {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         EventModel that = (EventModel) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(prettyName, that.prettyName) && Objects.equals(location, that.location) && Objects.equals(price, that.price) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime);
+        return Objects.equals(eventId, that.eventId) && Objects.equals(title, that.title) && Objects.equals(prettyName, that.prettyName) && Objects.equals(location, that.location) && Objects.equals(price, that.price) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(startTime, that.startTime) && Objects.equals(endTime, that.endTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, prettyName, location, price, startDate, endDate, startTime, endTime);
+        return Objects.hash(eventId, title, prettyName, location, price, startDate, endDate, startTime, endTime);
     }
 }
