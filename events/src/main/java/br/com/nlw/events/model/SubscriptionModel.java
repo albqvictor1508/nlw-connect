@@ -45,4 +45,12 @@ public class SubscriptionModel {
     public void setSubscriber(UserModel subscriber) {
         this.subscriber = subscriber;
     }
+
+    public UserModel getIndication() {
+        return indication;
+    }
+
+    public void setIndication(UserModel indication) {
+        this.indication = indication;
+    }
 }

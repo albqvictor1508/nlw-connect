@@ -3,6 +3,7 @@ package br.com.nlw.events.service;
 import br.com.nlw.events.dto.SubscriptionResponse;
 import br.com.nlw.events.exception.SubscriptionConflictException;
 import br.com.nlw.events.exception.EventNotFoundException;
+import br.com.nlw.events.exception.UserIndicatorNotFoundException;
 import br.com.nlw.events.model.EventModel;
 import br.com.nlw.events.model.SubscriptionModel;
 import br.com.nlw.events.model.UserModel;
@@ -23,7 +24,7 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionRepository subRepo;
 
-    public SubscriptionResponse createSubscription(String eventName, UserModel user) {
+    public SubscriptionResponse createSubscription(String eventName, UserModel user, Integer userId) {
         EventModel evt = eventRepo.findByPrettyName(eventName);
 
         if(evt == null) {
@@ -36,9 +37,16 @@ public class SubscriptionService {
             userRec = userRepo.save(user);
         }
 
+        UserModel indicator = userRepo.findById(userId).orElse(null);
+
+        if(indicator == null) {
+            throw new UserIndicatorNotFoundException("user indicate"+userId+" not found");
+        }
+
         SubscriptionModel subs = new SubscriptionModel();
         subs.setEvent(evt);
         subs.setSubscriber(userRec);
+        subs.setIndication(indicator);
 
         SubscriptionModel tmpSub = subRepo.findByEventAndSubscriber(evt, userRec);
 
