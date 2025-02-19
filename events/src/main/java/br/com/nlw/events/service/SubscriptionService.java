@@ -1,5 +1,6 @@
 package br.com.nlw.events.service;
 
+import br.com.nlw.events.dto.SubscriptionRankingItem;
 import br.com.nlw.events.dto.SubscriptionResponse;
 import br.com.nlw.events.exception.SubscriptionConflictException;
 import br.com.nlw.events.exception.EventNotFoundException;
@@ -12,6 +13,8 @@ import br.com.nlw.events.repo.SubscriptionRepository;
 import br.com.nlw.events.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SubscriptionService {
@@ -46,8 +49,6 @@ public class SubscriptionService {
             }
         }
 
-
-
         SubscriptionModel subs = new SubscriptionModel();
         subs.setEvent(evt);
         subs.setSubscriber(userRec);
@@ -62,5 +63,15 @@ public class SubscriptionService {
         SubscriptionModel res = subRepo.save(subs);
 
         return new SubscriptionResponse(res.getSubscriptionNumber(), "http://codecraft.com/"+res.getEvent().getPrettyName()+"/"+res.getSubscriber().getId());
+    }
+
+    public List<SubscriptionRankingItem> getCompleteRanking(String prettyName) {
+        EventModel evt = eventRepo.findByPrettyName(prettyName);
+
+        if(evt == null) {
+            throw new EventNotFoundException("Event " + prettyName + " not found");
+        }
+
+        return subRepo.generateRanking(evt.getId());
     }
 }
