@@ -23,10 +23,14 @@ public class SubscriptionService {
     public SubscriptionModel createSubscription(String eventName, UserModel user) {
         SubscriptionModel subs = new SubscriptionModel();
         EventModel evt = eventRepo.findByPrettyName(eventName);
-        user = userRepo.save(user);
+        UserModel userRec = userRepo.findByEmail(user.getEmail());
+
+        if(userRec == null) {
+            userRec = userRepo.save(user);
+        }
 
         subs.setEvent(evt);
-        subs.setSubscriber(user);
+        subs.setSubscriber(userRec);
         SubscriptionModel res = subRepo.save(subs);
 
         return res;
