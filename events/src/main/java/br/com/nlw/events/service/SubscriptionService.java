@@ -37,11 +37,16 @@ public class SubscriptionService {
             userRec = userRepo.save(user);
         }
 
-        UserModel indicator = userRepo.findById(userId).orElse(null);
+        UserModel indicator = null;
+        if(userId != null) {
+            indicator = userRepo.findById(userId).orElse(null);
 
-        if(indicator == null) {
-            throw new UserIndicatorNotFoundException("user indicate"+userId+" not found");
+            if(indicator == null) {
+                throw new UserIndicatorNotFoundException("user indicate"+userId+" not found");
+            }
         }
+
+
 
         SubscriptionModel subs = new SubscriptionModel();
         subs.setEvent(evt);
