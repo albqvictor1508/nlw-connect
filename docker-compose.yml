@@ -8,4 +8,8 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=dev123
+    volumes:
+      - mysql-volume:/var/lib/mysql
 
+volumes:
+  mysql-volume:
