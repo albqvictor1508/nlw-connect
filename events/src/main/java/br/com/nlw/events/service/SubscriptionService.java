@@ -1,5 +1,7 @@
 package br.com.nlw.events.service;
 
+import br.com.nlw.events.dto.SubscriptionResponse;
+import br.com.nlw.events.exception.SubscriptionConflictException;
 import br.com.nlw.events.exception.EventNotFoundException;
 import br.com.nlw.events.model.EventModel;
 import br.com.nlw.events.model.SubscriptionModel;
@@ -21,8 +23,7 @@ public class SubscriptionService {
     @Autowired
     private SubscriptionRepository subRepo;
 
-    public SubscriptionModel createSubscription(String eventName, UserModel user) {
-        SubscriptionModel subs = new SubscriptionModel();
+    public SubscriptionResponse createSubscription(String eventName, UserModel user) {
         EventModel evt = eventRepo.findByPrettyName(eventName);
 
         if(evt == null) {
@@ -35,10 +36,18 @@ public class SubscriptionService {
             userRec = userRepo.save(user);
         }
 
+        SubscriptionModel subs = new SubscriptionModel();
         subs.setEvent(evt);
         subs.setSubscriber(userRec);
+
+        SubscriptionModel tmpSub = subRepo.findByEventAndSubscriber(evt, userRec);
+
+        if(tmpSub != null) {
+            throw new SubscriptionConflictException("Subscription already exists");
+        }
+
         SubscriptionModel res = subRepo.save(subs);
 
-        return res;
+        return new SubscriptionResponse(res.getSubscriptionNumber(), "http://codecraft.com/"+res.getEvent().getPrettyName()+"/"+res.getSubscriber().getId());
     }
 }
