@@ -46,8 +46,10 @@ public class SubscriptionController {
 
     @GetMapping("/subscription/{prettyName}/ranking/{userId}")
     public ResponseEntity<?> generateRankingByEventAndUser(@PathVariable String prettyName,@PathVariable(required = false) Integer userId) {
-        service.getRankingByUser(prettyName, userId);
-
-        return null;
+        try {
+            return ResponseEntity.ok(service.getRankingByUser(prettyName, userId));
+        } catch (Exception ex) {
+            return ResponseEntity.status(404).body(new ErrorMessage(ex.getMessage()));
+        }
     }
 }

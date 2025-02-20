@@ -85,7 +85,7 @@ public class SubscriptionService {
            throw new UserIndicatorNotFoundException("Não há inscrições com indicação do usuário: " + userId);
        }
 
-        Integer position = IntStream.range(0, ranking.size());
-       return null;
+        Integer position = IntStream.range(0, ranking.size()).filter(pos -> ranking.get(pos).userId().equals(userId)).findFirst().getAsInt();
+       return new SubscriptionRankingByUser(item, position + 1);
     }
 }
